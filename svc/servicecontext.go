@@ -10,8 +10,8 @@ import (
 )
 
 type ServiceContext struct {
-	Config       *config.Config
-	OtherSideUid map[int64]bool
+	Config            *config.Config
+	OtherSideUid      map[int64]bool
 	SignInModel       model.SignInModel
 	DanmuCntModel     model.DanmuCntModel
 	BlindBoxStatModel model.BlindBoxStatModel
@@ -30,12 +30,21 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	if err != nil {
 		panic(err)
 	}
-	return &ServiceContext{
-		OtherSideUid: make(map[int64]bool),
+
+	// 构建基础 ServiceContext
+	svcCtx := &ServiceContext{
+		OtherSideUid:      make(map[int64]bool),
 		SignInModel:       model.NewSignInModel(db, int64(c.RoomId)),
 		DanmuCntModel:     model.NewDanmuCntModel(db, int64(c.RoomId)),
 		BlindBoxStatModel: model.NewBlindBoxStatModel(db, int64(c.RoomId)),
 		Config:            &c,
 		UserID:            0,
 	}
+
+	// 记录启动时的原始欢迎弹幕配置，供天选开始后使用
+	svcCtx.Autointerract.EntryEffect = c.EntryEffect
+	svcCtx.Autointerract.WelcomeHighWealthy = c.WelcomeHighWealthy
+	svcCtx.Autointerract.InteractWord = c.InteractWord
+
+	return svcCtx
 }
