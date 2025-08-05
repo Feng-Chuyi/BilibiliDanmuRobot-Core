@@ -6,14 +6,12 @@ import (
 	"errors"
 	"github.com/avast/retry-go/v4"
 	"github.com/xbclub/BilibiliDanmuRobot-Core/entity"
-	"github.com/xbclub/BilibiliDanmuRobot-Core/logic"
 	"github.com/xbclub/BilibiliDanmuRobot-Core/svc"
 	"github.com/zeromicro/go-zero/core/logx"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -81,11 +79,7 @@ func Send(msg string, svcCtx *svc.ServiceContext, reply ...*entity.DanmuMsgTextR
 		return nil
 	}, retry.Attempts(3), retry.Delay(1*time.Second))
 	if err != nil {
-		if strings.Contains(err.Error(), "敏感词") {
-			logic.PushToBulletSender("嘤…猴屁股想说的话被屏蔽了喵~", reply...)
-		} else {
-			logic.PushToBulletSender("呜呜呜…猴屁股嘴瓢了，再来一次吧！", reply...)
-		}
+		logx.Error(err)
 	}
 	return nil
 }
