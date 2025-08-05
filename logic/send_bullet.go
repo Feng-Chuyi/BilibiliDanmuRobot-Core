@@ -54,10 +54,15 @@ func StartSendBullet(ctx context.Context, svcCtx *svc.ServiceContext) {
 				msgdata = append(msgdata, string(msgrun[(m-1)*danmuLen:danmuLen*m]))
 			}
 			for _, msgs := range msgdata {
-				if err := http.Send(msgs, svcCtx, bullet.Reply...); err != nil {
-					logx.Errorf("弹幕发送失败：%s msg: %s", err, msgs)
+
+				if !svcCtx.Config.SendEnabled {
+					logx.Infof("[测试模式] 模拟发送弹幕：%s", msgs)
 				} else {
-					logx.Infof("弹幕发送成功：%s", msgs)
+					if err := http.Send(msgs, svcCtx, bullet.Reply...); err != nil {
+						logx.Errorf("弹幕发送失败：%s msg: %s", err, msgs)
+					} else {
+						logx.Infof("弹幕发送成功：%s", msgs)
+					}
 				}
 				//fmt.Println(msgs)
 				time.Sleep(1 * time.Second) // 防止弹幕发送过快

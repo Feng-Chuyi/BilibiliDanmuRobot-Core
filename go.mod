@@ -1,5 +1,7 @@
 module github.com/xbclub/BilibiliDanmuRobot-Core
 
+replace github.com/xbclub/BilibiliDanmuRobot-Core => C:/Users/13693/GolandProjects/BilibiliDanmuRobot-Core
+
 go 1.24
 
 require (

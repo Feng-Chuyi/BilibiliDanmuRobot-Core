@@ -73,12 +73,17 @@ func Send(msg string, svcCtx *svc.ServiceContext, reply ...*entity.DanmuMsgTextR
 			return errors.New(respdata.Msg)
 		}
 		if respdata.Msg == "f" {
-			logx.Infof("请求send失败:%s , %s", respdata.Msg, "弹幕内容包含敏感词，被服务器拒绝")
+        logx.Infof("请求send失败:%s , %s", respdata.Msg, "弹幕内容包含敏感词，被服务器拒绝")
+        return errors.New("弹幕内容包含敏感词，被服务器拒绝")
 		}
 		return nil
 	}, retry.Attempts(3), retry.Delay(1*time.Second))
 	if err != nil {
-		logx.Error(err)
+        if strings.Contains(err.Error(), "敏感词") {
+            logic.PushToBulletSender("嘤…猴屁股想说的话被屏蔽了喵~", reply...)
+        } else {
+            logic.PushToBulletSender("呜呜呜…猴屁股嘴瓢了，再来一次吧！", reply...)
+        }
 	}
 	return nil
 }

@@ -20,6 +20,7 @@ func (w *wsHandler) welcomeInteractWord() {
 	w.client.RegisterCustomEventHandler("INTERACT_WORD", func(s string) {
 		interact := &entity.InteractWordText{}
 		_ = json.Unmarshal([]byte(s), interact)
+
 		// 1 进场 2 关注 3 分享 5(互关)
 		if interact.Data.MsgType == 1 {
 			if !w.svc.Config.InteractSelf && strconv.Itoa(int(interact.Data.Uid)) == w.svc.RobotID {

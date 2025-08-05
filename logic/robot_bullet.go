@@ -49,13 +49,13 @@ func handleRobotBullet(content entity.Bullet, svcCtx *svc.ServiceContext) {
 	if svcCtx.Config.RobotMode == "ChatGPT" {
 		if reply, err = http.RequestChatgptRobot(content.Msg, svcCtx); err != nil {
 			logx.Errorf("请求机器人失败：%v", err)
-			PushToBulletSender("不好意思，机器人坏掉了...", content.Reply...)
+			PushToBulletSender("猴屁股要被玩坏啦(｡•́︿•̀｡) ♥", content.Reply...)
 			return
 		}
 	} else {
 		if reply, err = http.RequestQingyunkeRobot(content.Msg); err != nil {
 			logx.Errorf("请求机器人失败：%v", err)
-			PushToBulletSender("不好意思，机器人坏掉了...", content.Reply...)
+			PushToBulletSender("猴屁股要被玩坏啦(｡•́︿•̀｡) ♥", content.Reply...)
 			return
 		}
 		bulltes := splitRobotReply(reply, svcCtx)

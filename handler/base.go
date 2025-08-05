@@ -250,6 +250,11 @@ func (w *wsHandler) startLogic() {
 	//w.registerHandler()
 }
 func (w *wsHandler) registerHandler() {
+
+	w.client.RegisterCustomEventHandler("*", func(raw string) {
+		logx.Debugf("接收到未知事件数据: %s", raw)
+	})
+
 	w.welcomeEntryEffect()
 	w.welcomeInteractWord()
 	logx.Info("弹幕处理已开启")

@@ -33,7 +33,7 @@ type Config struct {
 		APIToken string `json:",optional"`
 		Prompt   string `json:",default=你是一个非常幽默的机器人助理，可以使用emoji表情符号，可以使用颜文字"`
 		Limit    bool   `json:",default=true"`
-		Model    string `json:",default=gpt-3.5-turbo"`
+		Model    string `json:",default=gpt-4o-mini"`
 	}
 
 	// 欢迎配置
@@ -94,6 +94,9 @@ type Config struct {
 	// 抽奖设置
 	LotteryEnable bool   `json:",default=true"` // 抽奖开关
 	LotteryUrl    string `json:",optional"`     // 抽奖地址
+
+	// 测试设置
+	SendEnabled bool `json:",default=true"` // 控制是否真正发送弹幕
 }
 type CronDanmuList struct {
 	Cron   string   `json:",optional"`      // 定时表达式

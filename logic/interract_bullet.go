@@ -68,19 +68,25 @@ func Interact(ctx context.Context, svcCtx *svc.ServiceContext) {
 
 			t.Reset(w)
 		case g = <-interractGiver.interractChan:
+
+			logx.Infof("[进房监听] 接收到用户：UID=%d，内容=%s", g.Uid, g.Msg)
+
 			//interractGiver.tmpmsg = append(interractGiver.tmpmsg, *g)
 			interractGiver.locked.Lock()
 			if value, ok := interractGiver.interractFilter[g.Uid]; ok && value.Add(w).Unix() >= time.Now().Unix() {
 				logx.Debugf("用户 %v 10秒内重复欢迎已被过滤", g.Uid)
 			} else {
+				logx.Infof("[欢迎处理] 用户 %d 进入欢迎流程，是否@欢迎：%v", g.Uid, svcCtx.Config.WelcomeUseAt)
 				parts := strings.Split(g.Msg, "\n")
 				for _, s := range parts {
 					if svcCtx.Config.WelcomeUseAt {
 						g.Reply = &entity.DanmuMsgTextReplyInfo{
 							ReplyUid: strconv.FormatInt(g.Uid, 10),
 						}
+						logx.Infof("[欢迎发送] 使用@欢迎弹幕：%s", s)
 						PushToBulletSender(s, g.Reply)
 					} else {
+						logx.Infof("[欢迎发送] 发送弹幕：%s", s)
 						PushToBulletSender(s)
 					}
 					logx.Debug(s)
